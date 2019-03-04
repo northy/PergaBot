@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
+#Versão 1.0
+version="1.0"
+
 import requests, os, sys, time, datetime, re
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from getpass import getpass
 from bs4 import BeautifulSoup
 from prettytable import PrettyTable
@@ -14,15 +14,16 @@ if os.name == 'nt':
 else :
 	ostype="o" #other
 
-ajuda="""uso: ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha | -t tempo] ...
+ajuda="""uso: ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 Opções e argumentos:
--a  | --auto               : modo automático, renova todos os livros marcados como "Precisa de atenção" (padrão: falso)
--d  | --driver  driver     : seleciona driver para ser usado no selenium, veja Drivers
--m              matrícula  : argumento para prover a matrícula na inicialização
--p              senha      : argumento para prover a senha do pergamum na inicialização
--t              tempo      : tempo em dias para marcar livro como  "Precisa de atenção" (padrão: 2)
--s  | --status             : somente mostra o seu acervo de livros emprestados. (padrão: falso)
-*-b | --binary location    : localização do arquivo do driver (padrão: pasta de execução) [TODO]
+-a  | --auto                 : modo automático, renova todos os livros marcados como "Precisa de atenção" (padrão: falso)
+-d  | --driver  <driver>     : seleciona driver para ser usado no selenium, veja Drivers
+-m              <matrícula>  : argumento para prover a matrícula na inicialização
+-p              <senha>      : argumento para prover a senha do pergamum na inicialização
+-t              <tempo>      : tempo em dias para marcar livro como  "Precisa de atenção" (padrão: 2)
+-s  | --status               : somente mostra o seu acervo de livros emprestados. (padrão: falso)
+-b | --binary  <location>    : localização do arquivo do driver (padrão: pasta de execução)
+--version                    : printa a versão do PergaBot
 
 Drivers:
 chromedriver (padrão)
@@ -41,6 +42,8 @@ while (i<len(sys.argv)) :
 	if (sys.argv[i]=='-?' or sys.argv[i]=='/?' or sys.argv=='--help') :
 		print(ajuda)
 		exit() ##
+	if (sys.argv[i]=='--version') :
+		print("Pergabot versão",version,end='\n\n')
 	elif (sys.argv[i]=="-a" or sys.argv[i]=="--auto") :
 		automode = True
 	elif (sys.argv[i]=="-s" or sys.argv[i]=="--status") :
@@ -75,7 +78,12 @@ while (i<len(sys.argv)) :
 		print("Veja ./pergabot.py --help")
 		exit() ##
 	i+=1
-	
+
+if not(statusmode) :
+	from selenium import webdriver
+	from selenium.webdriver.common.keys import Keys
+	from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
 url = "http://consulta.uffs.edu.br/pergamum/biblioteca_s/php/login_usu.php" #URL de acesso ao pergamum
 
 print("Iniciando sessão do requests...")
@@ -160,9 +168,11 @@ with requests.Session() as s:
 	for i in range(len(books_names)) :
 		t.add_row([books_names[i], books_exp[i]+(' *' if needs_renew[i] else '')])
 	print(t)
-	print("\"*\" = Precisa de atenção para ser renovado\n")
+	print("\"*\" = Precisa de atenção para ser renovado")
 	
 	if (statusmode) : exit()
+	
+	print()
 	
 	#Confirmação de quais renovar
 	if not(automode) :
