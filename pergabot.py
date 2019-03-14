@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 #Versão 1.0
 version="1.0"
@@ -209,8 +209,8 @@ with requests.Session() as s:
 		renovarBtns = driver.find_elements_by_class_name("btn_renovar");
 		renovarBtns[i].send_keys(Keys.RETURN)
 		time.sleep(3)
-		if (driver.current_url.find('erro')!=-1) : print("ERRO...")
-		else : print("Sucesso...")	
+		#if (driver.current_url.find('erro')!=-1) : print("ERRO...")
+		#else : print("Sucesso...")	
 		driver.execute_script("window.history.go(-1)")
 		time.sleep(3)
 	
