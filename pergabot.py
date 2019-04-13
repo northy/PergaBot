@@ -22,7 +22,7 @@ Opções e argumentos:
 -p              <senha>      : argumento para prover a senha do pergamum na inicialização
 -t              <tempo>      : tempo em dias para marcar livro como  "Precisa de atenção" (padrão: 2)
 -s  | --status               : somente mostra o seu acervo de livros emprestados. (padrão: falso)
--b | --binary  <location>    : localização do arquivo do driver (padrão: pasta de execução)
+-b  | --binary  <location>   : localização do arquivo do driver (padrão: pasta de execução)
 --version                    : printa a versão do PergaBot
 
 Drivers:

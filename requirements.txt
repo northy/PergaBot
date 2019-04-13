@@ -1,0 +1,5 @@
+requests~=2.21.0
+bs4~=0.0.1
+prettytable~=0.7.2
+selenium~=3.141.0
+lxml~=4.3.3

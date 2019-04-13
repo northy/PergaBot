@@ -6,10 +6,11 @@ Para instalar o software, basta clonar o repositório
 ```sh
 $ git clone https://github.com/northy/PergaBot.git
 ```
-E baixar as dependências de bibliotecas
+Baixar as dependências de bibliotecas
 ```sh
-$ pip install <biblioteca>
+$ pip install -r requirements.txt
 ```
+E baixar o driver desejado (links abaixo)
 
 ## Uso:
 ```sh
@@ -31,6 +32,8 @@ $ ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 * [Requests]
 * [PrettyTable]
 * [Selenium]
+* [BeautifulSoup4]
+* [lxml]
 
 ## Drivers atualmente implementados:
 * [ChromeDriver] (padrão)
@@ -41,3 +44,5 @@ Versão atual: **1.0**
 [PrettyTable]: <https://pypi.org/project/PrettyTable/>
 [Selenium]: <https://selenium-python.readthedocs.io/>
 [ChromeDriver]: <https://sites.google.com/a/chromium.org/chromedriver/>
+[BeautifulSoup4]: <https://pypi.org/project/beautifulsoup4/>
+[lxml]: <https://pypi.org/project/lxml/>
