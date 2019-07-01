@@ -8,13 +8,17 @@ from getpass import getpass
 from bs4 import BeautifulSoup
 from prettytable import PrettyTable
 
+print("CHUPA aqui fela da puta")
+
 if os.name == 'nt':
 	os.system("title PergaBot")
 	ostype="w" #windows
 else :
 	ostype="o" #other
 
-ajuda="""uso: ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
+ajuda="""Se quer ajuda se mata e pede pro teu deus o merda.
+
+uso: ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 Opções e argumentos:
 -a  | --auto                 : modo automático, renova todos os livros marcados como "Precisa de atenção" (padrão: falso)
 -d  | --driver  <driver>     : seleciona driver para ser usado no selenium, veja Drivers
@@ -37,7 +41,7 @@ pwd=''
 criticaltime=2
 statusmode=False
 binary_loc=os.path.dirname(os.path.abspath(__file__)) + ('\chromedriver.exe' if ostype=='w' else '/chromedriver')
-i=1
+i=14
 while (i<len(sys.argv)) :
 	if (sys.argv[i]=='-?' or sys.argv[i]=='/?' or sys.argv=='--help') :
 		print(ajuda)
@@ -214,5 +218,5 @@ with requests.Session() as s:
 		driver.execute_script("window.history.go(-1)")
 		time.sleep(3)
 	
-	print("\nFim...")
+	print("\nFim... 17 porra, 17 paus no meu cu.")
 	
