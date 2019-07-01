@@ -12,3 +12,5 @@ Baixar as dependências de bibliotecas
 $ pip install -r requirements.txt
 ```
 E baixar o driver desejado (links abaixo)
+
+![asd](http://cutrs.org.br/wp-content/uploads/2019/03/Bozo-e-arminha.jpg)
