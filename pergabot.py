@@ -30,7 +30,7 @@ def readArgs() :
 	parser._positionals.title = "Argumentos posicionais"
 	parser._optionals.title = "Argumentos opcionais"
 	parser.add_argument("-h","--help",action="help",default=argparse.SUPPRESS,help="Mostra esta mensagem de ajuda e sai")
-	parser.add_argument("-v","--version",help="Imprime a versão do PergaBot e sai",action="version", version="%(prog)s %(versionStr)s")
+	parser.add_argument("-v","--version",help="Imprime a versão do PergaBot e sai",action="version", version=f"PergaBot {versionStr}")
 	parser.add_argument("-a","--auto",help="Modo automático, renova todos os livros marcados como \"Precisa de atenção\" (padrão: falso)", action="store_true")
 	parser.add_argument("-d","--driver",help="Seleciona driver para ser usado no selenium, veja Drivers", default="chromedriver", type=str, dest="driverTarget")
 	parser.add_argument("-m",help="Argumento para prover a matrícula na inicialização", default='', type=str, dest="mat")
@@ -38,14 +38,13 @@ def readArgs() :
 	parser.add_argument("-t",help="Tempo em dias para marcar livro como  \"Precisa de atenção\" (padrão: 2)", default=2, type=int, dest="criticalTime")
 	parser.add_argument("-s","--status",help="Somente mostra o seu acervo de livros emprestados. (padrão: falso)", action="store_true")
 	parser.add_argument("-b","--binary",help="Localização do arquivo do driver (padrão: pasta de execução)", default='', type=str, dest="binaryLoc")
-	parser.set_defaults(func=main)
 	args=parser.parse_args()
 	if (args.driverTarget!="chromedriver" and args.driverTarget!="geckodriver" and args.driverTarget!="firefox_binary") :
 		print("Invalid driver: %s"%(args.driverTarget))
 		exit(1)
 	if (args.binaryLoc == '') :
 		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarge}")
-	args.func(args)
+	return args
 
 def main(args) :
 	statusMode = args.status
@@ -197,8 +196,14 @@ def main(args) :
 			driver.execute_script("window.history.go(-1)")
 			time.sleep(3)
 		
-		print("\nFim...")
 		driver.quit()
 		
 if __name__=="__main__" :
-	readArgs()
+	try :
+		args = readArgs()
+		main(args)
+	except :
+		pass
+	finally :
+		print("\nFim...")
+		exit(0)
