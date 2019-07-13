@@ -42,7 +42,7 @@ $ ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 * [GeckoDriver]
 * Firefox Binary
 
-Versão atual: **1.0**
+Versão atual: **1.1**
 
 [Requests]: <http://docs.python-requests.org/en/master/>
 [PrettyTable]: <https://pypi.org/project/PrettyTable/>
