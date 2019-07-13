@@ -19,6 +19,8 @@ $ ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 ### Opções e argumentos:
 | Argumento | Função |
 | ------ | ------ |
+| -h  \| --help | Mostra uma mensagem de ajuda e sai |
+| -v  \| --version | Imprime a versão do PergaBot e sai |
 | -a  \| --auto | modo automático, renova todos os livros marcados como "Precisa de atenção" (padrão: falso) |
 | -d  \| --driver _driver_ | Seleciona driver para ser usado no selenium, veja Drivers |
 | -m  _matrícula_ | Argumento para prover a matrícula na inicialização |
@@ -26,7 +28,6 @@ $ ./pergabot.py [opções] ... [-d driver | -m matrícula | -p senha] ...
 | -t _tempo_ | Tempo em dias para marcar livro como  "Precisa de atenção" (padrão: 2) |
 | -s  \| --status | Somente mostra o seu acervo de livros emprestados. (padrão: falso) |
 | -b  \| --binary  _localização_ | Localização do arquivo do driver (padrão: pasta de execução) |
-| --version | Printa a versão do PergaBot |
 
 ## Bibliotecas utilizadas:
 * [Requests]
@@ -48,6 +49,6 @@ Versão atual: **1.0**
 [Selenium]: <https://selenium-python.readthedocs.io/>
 [BeautifulSoup4]: <https://pypi.org/project/beautifulsoup4/>
 [lxml]: <https://pypi.org/project/lxml/>
-[argparse]: <https://docs.python.org/3/library/argparse.html/>
+[argparse]: <https://docs.python.org/3/library/argparse.html>
 [GeckoDriver]: <https://github.com/mozilla/geckodriver/>
 [ChromeDriver]: <https://sites.google.com/a/chromium.org/chromedriver/>
