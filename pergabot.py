@@ -44,7 +44,7 @@ def readArgs() :
 		print("Invalid driver: %s"%(args.driverTarget))
 		exit(1)
 	if (args.binaryLoc == '') :
-		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarge}")
+		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarget}")
 	args.func(args)
 
 def main(args) :
