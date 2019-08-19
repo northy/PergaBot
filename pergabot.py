@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#Versão 1.1
 versionStr="1.1"
 
 import requests, os, sys, time, datetime, re, argparse, textwrap
@@ -32,62 +31,25 @@ def readArgs() :
 	parser.add_argument("-h","--help",action="help",default=argparse.SUPPRESS,help="Mostra esta mensagem de ajuda e sai")
 	parser.add_argument("-v","--version",help="Imprime a versão do PergaBot e sai",action="version", version=f"PergaBot {versionStr}")
 	parser.add_argument("-a","--auto",help="Modo automático, renova todos os livros marcados como \"Precisa de atenção\" (padrão: falso)", action="store_true")
-	parser.add_argument("-d","--driver",help="Seleciona driver para ser usado no selenium, veja Drivers", default="chromedriver", type=str, dest="driverTarget")
 	parser.add_argument("-m",help="Argumento para prover a matrícula na inicialização", default='', type=str, dest="mat")
 	parser.add_argument("-p",help="Argumento para prover a senha do pergamum na inicialização", default='', type=str, dest="pwd")
 	parser.add_argument("-t",help="Tempo em dias para marcar livro como  \"Precisa de atenção\" (padrão: 2)", default=2, type=int, dest="criticalTime")
 	parser.add_argument("-s","--status",help="Somente mostra o seu acervo de livros emprestados. (padrão: falso)", action="store_true")
-	parser.add_argument("-b","--binary",help="Localização do arquivo do driver (padrão: pasta de execução)", default='', type=str, dest="binaryLoc")
 	args=parser.parse_args()
-	if (args.driverTarget!="chromedriver" and args.driverTarget!="geckodriver" and args.driverTarget!="firefox_binary") :
-		print("Invalid driver: %s"%(args.driverTarget))
-		exit(1)
-	if (args.binaryLoc == '') :
-		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarget}")
 	return args
 
 def main(args) :
 	statusMode = args.status
 	mat = args.mat
 	pwd = args.pwd
-	driverTarget = args.driverTarget
 	autoMode = args.auto
 	criticalTime = args.criticalTime
-	binaryLoc = args.binaryLoc
 
-	if not(statusMode) :
-		from selenium import webdriver
-		from selenium.webdriver.common.keys import Keys
-		from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-
-	url = "http://consulta.uffs.edu.br/pergamum/biblioteca_s/php/login_usu.php" #URL de acesso ao pergamum
+	url = "http://consulta.uffs.edu.br/pergamum/biblioteca_s/php/login_usu.php" #URL de login ao pergamum
+	dashboard_url = "http://consulta.uffs.edu.br/pergamum/biblioteca_s/meu_pergamum/index.php" #URL do painel do pergamum (quando o usuário já está logado)
 
 	print("Iniciando sessão do requests...")
 	with requests.Session() as s:
-		
-		if not(statusMode) :
-			print("Iniciando Selenium Webdriver...")
-			if (driverTarget=='chromedriver') :
-				options = webdriver.ChromeOptions()
-				options.add_argument('headless')
-				options.add_argument('--log-level=3')
-				driver=webdriver.Chrome(binaryLoc,options=options)
-			
-			if (driverTarget=='firefox_binary') :
-				options = webdriver.FirefoxOptions()
-				options.add_argument('-headless')
-				binary = FirefoxBinary(binaryLoc)
-				driver = webdriver.Firefox(firefox_binary=binary,options=options)
-			
-			if (driverTarget=="geckodriver") :
-				options = webdriver.FirefoxOptions()
-				options.add_argument('-headless')
-				driver = webdriver.Firefox(executable_path=r"".join(binaryLoc),options=options)
-				
-			driver.get(url)
-			request_cookies_selenium = driver.get_cookies()
-			
-			for c in request_cookies_selenium : s.cookies.set(c['name'], c['value'])
 		
 		#Dados para o request
 		if (mat=='' or pwd=='') : print("\nInsira os dados para login no pergamum...")
@@ -133,12 +95,10 @@ def main(args) :
 		if (books_names==[]) : print("NENHUM"); exit(0) ##
 		else :
 			for i in range(len(books_names)) :
-				books_names[i]=books_names[i].replace('&lt;b&gt;','')
-				books_names[i]=books_names[i].replace('&lt;/b&gt;','')
+				books_names[i]=books_names[i].replace('&lt;b&gt;','').replace('&lt;/b&gt;','')
 				books_names[i]=re.sub(r'(\s"|title=")','', books_names[i])
 				books_names[i]=re.sub(r'\s\s\s',' ', books_names[i])
 				books_names[i]=re.sub(r'\s\s',' ', books_names[i])
-		
 		#Extração dos dias de expiração
 		needs_renew=[False]*len(books_names)
 		books_exp = re.findall(r'\d\d/\d\d/\d\d\d\d',books_div)
@@ -152,7 +112,7 @@ def main(args) :
 		print(t)
 		print("\"*\" = Precisa de atenção para ser renovado")
 		
-		if (statusMode) : exit()
+		if (statusMode) : exit(0)
 		
 		print()
 		
@@ -175,28 +135,22 @@ def main(args) :
 			if len(books_to_renew)==0 : print("Nada para renovar, saindo..."); exit(0) ##
 		
 		print("Iniciando processo de renovação...")
-		print("Injetando cookies no selenium...\n")
-		
-		#Chamada do selenium
-		dict_webr_cookies = web_r.cookies.get_dict()
-		response_cookies_selenium = [{'name':name, 'value':value} for name, value in dict_webr_cookies.items()]
-		for c in response_cookies_selenium : driver.add_cookie(c)
-		driver.get(logged_url)
-		
+
+		html_reduced_id = str(web_soup.findAll(attrs={"id":"id_codigoreduzido_anteriorPendente"}))
+		reduced_id = html_reduced_id[re.compile(r'value="').search(html_reduced_id).span()[1]:re.compile(r'"/').search(html_reduced_id).span()[0]]
+		renew_btns_data = web_soup.findAll(attrs={"class": "btn_renovar"})
+		renew_attrs = []
+		for btn in renew_btns_data :
+			btn=str(btn)
+			renew_attrs.append(list(btn[re.compile(r'\(').search(btn).span()[1]:re.compile(r'\)').search(btn).span()[0]].replace("'",'').split(',')))
 		print("Começando a renovar livro a livro...\n")
 		
 		#Chamada de renovar
 		for i in books_to_renew :
 			print("Renovando livro: %s... "%books_names[i])
-			renovarBtns = driver.find_elements_by_class_name("btn_renovar")
-			renovarBtns[i].send_keys(Keys.RETURN)
-			time.sleep(3)
-			#if (driver.current_url.find('erro')!=-1) : print("ERRO...")
-			#else : print("Sucesso...")	
-			driver.execute_script("window.history.go(-1)")
-			time.sleep(3)
-		
-		driver.quit()
+			renew_url=dashboard_url+"?rs=ajax_renova&rst=&rsrnd={}&rsargs[]={}&rsargs[]={}&rsargs[]={}&rsargs[]={}".format(int(time.time() * 1000),renew_attrs[i][0],renew_attrs[i][1],renew_attrs[i][2],reduced_id)
+			s.get(renew_url,headers=headers)
+			s.get(logged_url,headers=headers)
 		
 if __name__=="__main__" :
 	try :
