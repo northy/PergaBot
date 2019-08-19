@@ -43,8 +43,8 @@ def readArgs() :
 		print("Invalid driver: %s"%(args.driverTarget))
 		exit(1)
 	if (args.binaryLoc == '') :
-		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarge}")
-	return args
+		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarget}")
+	args.func(args)
 
 def main(args) :
 	statusMode = args.status
@@ -199,6 +199,7 @@ def main(args) :
 		driver.quit()
 		
 if __name__=="__main__" :
+<<<<<<< HEAD
 	try :
 		args = readArgs()
 		main(args)
@@ -207,3 +208,6 @@ if __name__=="__main__" :
 	finally :
 		print("\nFim...")
 		exit(0)
+=======
+	readArgs()
+>>>>>>> cbf3bb2d8dd46a7f40ffdb75a49759aba2b4d014
