@@ -44,7 +44,7 @@ def readArgs() :
 		exit(1)
 	if (args.binaryLoc == '') :
 		args.binaryLoc=os.path.dirname(os.path.abspath(__file__)) + (f"\\{args.driverTarget}.exe" if ostype=='w' else f"/{args.driverTarget}")
-	args.func(args)
+	return args
 
 def main(args) :
 	statusMode = args.status
@@ -199,15 +199,12 @@ def main(args) :
 		driver.quit()
 		
 if __name__=="__main__" :
-<<<<<<< HEAD
 	try :
 		args = readArgs()
 		main(args)
-	except :
-		pass
+	except Exception as e :
+		print("Erro...")
+		print(e)
 	finally :
 		print("\nFim...")
 		exit(0)
-=======
-	readArgs()
->>>>>>> cbf3bb2d8dd46a7f40ffdb75a49759aba2b4d014
