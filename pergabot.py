@@ -3,7 +3,7 @@ import re
 import datetime, time
 from bs4 import BeautifulSoup
 
-versionStr="1.1"
+versionStr="1.2"
 
 class Pergabot() :
     def __init__(self, **kwargs) :

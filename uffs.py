@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import requests, os, sys, argparse, textwrap
+import os, argparse, textwrap
 from getpass import getpass
 from prettytable import PrettyTable
 from pergabot import Pergabot, versionStr
@@ -89,3 +89,4 @@ def main(args) :
 if __name__=="__main__" :
 	args = readArgs()
 	main(args)
+	print("Fim...")
