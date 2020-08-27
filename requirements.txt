@@ -1,5 +1,2 @@
-requests~=2.21.0
-bs4~=0.0.1
-prettytable~=0.7.2
-lxml~=4.3.3
-argparse~=1.4.0
+pipenv~=2020.6.2
+pipenv-shebang~=0.0.4

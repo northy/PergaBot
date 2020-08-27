@@ -9,6 +9,7 @@ $ git clone https://github.com/northy/pergabot.git
 E baixar as dependências de bibliotecas
 ```sh
 $ pip install -r requirements.txt
+$ pipenv sync
 ```
 
 ## Uso:
